@@ -24,22 +24,24 @@ interface ColoringCanvasProps {
   onComplete?: () => void;
 }
 
-// Paleta de cores segura e vibrante para crianças (ampliada)
+// Paleta ampliada organizada por grupos
 const COLOR_PALETTE = [
-  // Primárias e secundárias
-  '#ff4757', '#ff6348', '#ffdd59', '#2ed573', '#3742fa', '#a55eea',
-  // Tons quentes adicionais
-  '#ff7f50', '#ffa502', '#eccc68',
-  // Tons frios adicionais
-  '#70a1ff', '#7bed9f', '#1e90ff',
+  // Vermelhos/Rosas
+  '#ff4757', '#ff6b81', '#ff7f7f', '#ff9aa2',
+  // Laranjas/Amarelos
+  '#ff7f50', '#ffa502', '#ffdd59', '#ffe066',
+  // Verdes
+  '#2ed573', '#7bed9f', '#55efc4', '#00b894',
+  // Azuis
+  '#3742fa', '#70a1ff', '#1e90ff', '#74b9ff',
+  // Roxos
+  '#a55eea', '#e0c3fc', '#9b59b6', '#8e44ad',
   // Pastéis
-  '#ffd1dc', '#c6f1e7', '#e0c3fc', '#fef3bd',
-  // Neutros e marrom
+  '#ffd1dc', '#c6f1e7', '#fef3bd', '#c3f0ff',
+  // Neutros/Marrom
   '#ffffff', '#000000', '#747d8c', '#8b4513', '#a0522d',
-  // Tons de pele suaves
-  '#f6c7b6', '#e0ac69', '#c68642', '#8d5524',
-  // Azuis adicionais
-  '#2c2c54', '#1e3799'
+  // Tons de pele
+  '#f6c7b6', '#e0ac69', '#c68642', '#8d5524'
 ];
 
 export default function ColoringCanvas({ image, onSave, onComplete }: ColoringCanvasProps) {
@@ -57,6 +59,9 @@ export default function ColoringCanvas({ image, onSave, onComplete }: ColoringCa
   const [canRedo, setCanRedo] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [showColorPicker, setShowColorPicker] = useState(false);
+  const [customColor, setCustomColor] = useState('#ff4757');
+  const [recentColors, setRecentColors] = useState<string[]>([]);
+  const [favoriteColors, setFavoriteColors] = useState<string[]>([]);
   const [undoStack, setUndoStack] = useState<ImageData[]>([]);
   const [redoStack, setRedoStack] = useState<ImageData[]>([]);
   const [lastPos, setLastPos] = useState<{ x: number; y: number } | null>(null);
@@ -180,6 +185,20 @@ export default function ColoringCanvas({ image, onSave, onComplete }: ColoringCa
   // Iniciar desenho
   const startDrawing = (e: React.MouseEvent | React.TouchEvent) => {
     const pos = getEventPos(e);
+
+    // Conta-gotas com Alt/Option (ou botão direito)
+    if (("button" in e && (e as any).button === 2) || ("altKey" in e && (e as any).altKey)) {
+      const canvas = drawCanvasRef.current;
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return;
+      const data = ctx.getImageData(Math.floor(pos.x), Math.floor(pos.y), 1, 1).data;
+      const toHex = (n: number) => n.toString(16).padStart(2, '0');
+      const hex = `#${toHex(data[0])}${toHex(data[1])}${toHex(data[2])}`;
+      setCurrentTool(prev => ({ ...prev, color: hex }));
+      setRecentColors(prev => [hex, ...prev.filter(c => c !== hex)].slice(0, 8));
+      return;
+    }
 
     if (currentTool.type === 'bucket') {
       // Executa preenchimento imediato e não entra no modo de desenho contínuo
@@ -482,6 +501,21 @@ export default function ColoringCanvas({ image, onSave, onComplete }: ColoringCa
             <span className="text-child-sm w-8">{currentTool.size}</span>
           </div>
 
+          {/* Opacidade */}
+          <div className="flex items-center gap-2">
+            <span className="text-child-sm font-child-friendly">Opacidade:</span>
+            <input
+              type="range"
+              min="0.1"
+              max="1"
+              step="0.05"
+              value={currentTool.opacity}
+              onChange={(e) => setCurrentTool(prev => ({ ...prev, opacity: parseFloat(e.target.value) }))}
+              className="w-24"
+            />
+            <span className="text-child-sm w-10">{Math.round(currentTool.opacity*100)}%</span>
+          </div>
+
           {/* Seletor de cores */}
           <div className="relative">
             <ToolButton
@@ -500,7 +534,7 @@ export default function ColoringCanvas({ image, onSave, onComplete }: ColoringCa
                   exit={{ opacity: 0, scale: 0.8 }}
                   className="absolute top-full mt-2 bg-white shadow-child-lg rounded-child p-4 z-10"
                 >
-                  <div className="grid grid-cols-4 gap-2 w-48">
+                  <div className="grid grid-cols-4 gap-2 w-56">
                     {COLOR_PALETTE.map((color, index) => (
                       <button
                         key={index}
@@ -510,12 +544,88 @@ export default function ColoringCanvas({ image, onSave, onComplete }: ColoringCa
                         style={{ backgroundColor: color }}
                         onClick={() => {
                           setCurrentTool(prev => ({ ...prev, color }));
+                          setRecentColors(prev => [color, ...prev.filter(c => c !== color)].slice(0, 8));
                           setShowColorPicker(false);
                         }}
                         aria-label={`Cor ${color}`}
                       />
                     ))}
                   </div>
+                  {/* Favoritas */}
+                  {favoriteColors.length > 0 && (
+                    <div className="mt-3">
+                      <div className="text-child-sm text-gray-600 mb-1">Favoritas:</div>
+                      <div className="flex flex-wrap gap-2">
+                        {favoriteColors.map((color) => (
+                          <button
+                            key={color}
+                            className="w-8 h-8 rounded-full border"
+                            style={{ backgroundColor: color, borderColor: '#ccc' }}
+                            onClick={() => {
+                              setCurrentTool(prev => ({ ...prev, color }));
+                              setShowColorPicker(false);
+                            }}
+                            aria-label={`Favorita ${color}`}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  <div className="mt-3 flex items-center gap-2">
+                    <input
+                      type="color"
+                      value={customColor}
+                      onChange={(e) => setCustomColor(e.target.value)}
+                      className="w-10 h-10 p-0 border rounded"
+                      aria-label="Cor personalizada"
+                    />
+                    <input
+                      type="text"
+                      value={customColor}
+                      onChange={(e) => setCustomColor(e.target.value)}
+                      className="w-24 border rounded px-2 py-1 text-child-sm"
+                      aria-label="Hex"
+                    />
+                    <button
+                      className="px-3 py-2 bg-primary-500 text-white rounded-child text-child-sm"
+                      onClick={() => {
+                        const hex = customColor.startsWith('#') ? customColor : `#${customColor}`;
+                        setCurrentTool(prev => ({ ...prev, color: hex }));
+                        setRecentColors(prev => [hex, ...prev.filter(c => c !== hex)].slice(0, 8));
+                        setShowColorPicker(false);
+                      }}
+                    >
+                      Usar
+                    </button>
+                    <button
+                      className="px-3 py-2 bg-yellow-500 text-white rounded-child text-child-sm"
+                      onClick={() => {
+                        const hex = customColor.startsWith('#') ? customColor : `#${customColor}`;
+                        setFavoriteColors(prev => [hex, ...prev.filter(c => c !== hex)].slice(0, 12));
+                      }}
+                    >
+                      Favoritar
+                    </button>
+                  </div>
+                  {recentColors.length > 0 && (
+                    <div className="mt-3">
+                      <div className="text-child-sm text-gray-600 mb-1">Recentes:</div>
+                      <div className="flex flex-wrap gap-2">
+                        {recentColors.map((color) => (
+                          <button
+                            key={color}
+                            className="w-8 h-8 rounded-full border"
+                            style={{ backgroundColor: color, borderColor: '#ccc' }}
+                            onClick={() => {
+                              setCurrentTool(prev => ({ ...prev, color }));
+                              setShowColorPicker(false);
+                            }}
+                            aria-label={`Recente ${color}`}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </motion.div>
               )}
             </AnimatePresence>
@@ -572,6 +682,7 @@ export default function ColoringCanvas({ image, onSave, onComplete }: ColoringCa
             className="absolute top-0 left-0 cursor-crosshair touch-action-none"
             style={{ display: 'block' }}
             onMouseDown={startDrawing}
+            onContextMenu={(e) => { e.preventDefault(); startDrawing(e as any); }}
             onMouseMove={draw}
             onMouseUp={stopDrawing}
             onMouseLeave={stopDrawing}
