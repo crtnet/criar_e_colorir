@@ -47,6 +47,21 @@ export class SecureStorage {
     }
   }
 
+  // Versão silenciosa para tentativas internas (evita poluir o console durante estratégia de limpeza)
+  private static setItemSilent(key: string, value: any): boolean {
+    if (!this.isAvailable()) return false;
+    try {
+      if (!SecurityManager.validateDataCollection(value)) {
+        return false;
+      }
+      const serialized = JSON.stringify(value);
+      localStorage.setItem(key, serialized);
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
   // Recuperar dados com validação
   private static getItem<T>(key: string, defaultValue: T): T {
     if (!this.isAvailable()) return defaultValue;
@@ -132,6 +147,7 @@ export class SecureStorage {
   }
 
   // === IMAGENS OFFLINE ===
+  private static readonly MAX_OFFLINE_IMAGES = 20;
   static saveOfflineImages(images: ColoringImage[]): boolean {
     return SecureStorage.setItem(STORAGE_KEYS.OFFLINE_IMAGES, images);
   }
@@ -141,12 +157,33 @@ export class SecureStorage {
   }
 
   static addOfflineImage(image: ColoringImage): boolean {
-    const images = SecureStorage.getOfflineImages();
+    // Normalizar datas
+    if (!image.createdAt) image.createdAt = new Date();
+
+    let images = SecureStorage.getOfflineImages();
     if (!images.find(img => img.id === image.id)) {
       images.push(image);
-      return SecureStorage.setItem(STORAGE_KEYS.OFFLINE_IMAGES, images);
     }
-    return true;
+
+    // Ordenar por mais novo primeiro e respeitar limite máximo
+    images = images
+      .sort((a: any, b: any) => new Date(b.createdAt as any).getTime() - new Date(a.createdAt as any).getTime())
+      .slice(0, SecureStorage.MAX_OFFLINE_IMAGES);
+
+    // Tentar salvar; se exceder a cota, evict mais antigos até caber
+    const trySave = (arr: ColoringImage[]) => SecureStorage.setItemSilent(STORAGE_KEYS.OFFLINE_IMAGES, arr);
+    if (trySave(images)) return true;
+
+    // Ordenar por createdAt asc (mais antigos primeiro)
+    images = images.sort((a: any, b: any) => new Date(a.createdAt as any).getTime() - new Date(b.createdAt as any).getTime());
+    while (images.length > 0 && !trySave(images)) {
+      images.shift(); // remover o mais antigo
+    }
+    return images.length > 0;
+  }
+
+  static clearOfflineImages(): void {
+    SecureStorage.removeItem(STORAGE_KEYS.OFFLINE_IMAGES);
   }
 
   // === ID ANÔNIMO ===
@@ -293,6 +330,7 @@ export function useSecureStorage() {
     saveOfflineImages: SecureStorage.saveOfflineImages,
     getOfflineImages: SecureStorage.getOfflineImages,
     addOfflineImage: SecureStorage.addOfflineImage,
+    clearOfflineImages: SecureStorage.clearOfflineImages,
 
     // Conquistas
     saveAchievements: SecureStorage.saveAchievements,

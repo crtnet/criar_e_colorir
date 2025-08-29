@@ -51,7 +51,7 @@ const CATEGORY_NAMES: Record<ImageCategory, string> = {
   fantasy: 'Fantasia'
 };
 
-// Imagens pré-carregadas seguras
+// Imagens pré-carregadas seguras (somente as que existem em /public)
 const PRELOADED_IMAGES: ColoringImage[] = [
   {
     id: 'cat_001',
@@ -59,7 +59,7 @@ const PRELOADED_IMAGES: ColoringImage[] = [
     category: 'animals',
     difficulty: 'easy',
     imageUrl: '/images/coloring/cat-simple.svg',
-    thumbnailUrl: '/images/coloring/thumbs/cat-simple.jpg',
+    thumbnailUrl: '/images/coloring/thumbs/cat-simple.svg',
     isAIGenerated: false,
     isApproved: true,
     createdAt: new Date('2024-01-01'),
@@ -71,179 +71,11 @@ const PRELOADED_IMAGES: ColoringImage[] = [
     category: 'animals',
     difficulty: 'easy',
     imageUrl: '/images/coloring/dog-simple.svg',
-    thumbnailUrl: '/images/coloring/thumbs/dog-simple.jpg',
+    thumbnailUrl: '/images/coloring/thumbs/dog-simple.svg',
     isAIGenerated: false,
     isApproved: true,
     createdAt: new Date('2024-01-01'),
     tags: ['cachorro', 'animal', 'amigável', 'simples']
-  },
-  {
-    id: 'flower_001',
-    name: 'Flor Bonita',
-    category: 'nature',
-    difficulty: 'easy',
-    imageUrl: '/images/coloring/flower-simple.svg',
-    thumbnailUrl: '/images/coloring/thumbs/flower-simple.jpg',
-    isAIGenerated: false,
-    isApproved: true,
-    createdAt: new Date('2024-01-01'),
-    tags: ['flor', 'natureza', 'bonita', 'simples']
-  },
-  {
-    id: 'sun_001',
-    name: 'Sol Sorridente',
-    category: 'nature',
-    difficulty: 'easy',
-    imageUrl: '/images/coloring/sun-simple.svg',
-    thumbnailUrl: '/images/coloring/thumbs/sun-simple.jpg',
-    isAIGenerated: false,
-    isApproved: true,
-    createdAt: new Date('2024-01-01'),
-    tags: ['sol', 'natureza', 'sorridente', 'simples']
-  },
-  {
-    id: 'circle_001',
-    name: 'Círculo Decorado',
-    category: 'shapes',
-    difficulty: 'easy',
-    imageUrl: '/images/coloring/circle-pattern.svg',
-    thumbnailUrl: '/images/coloring/thumbs/circle-pattern.jpg',
-    isAIGenerated: false,
-    isApproved: true,
-    createdAt: new Date('2024-01-01'),
-    tags: ['círculo', 'forma', 'padrão', 'simples']
-  },
-  {
-    id: 'star_001',
-    name: 'Estrela Brilhante',
-    category: 'shapes',
-    difficulty: 'easy',
-    imageUrl: '/images/coloring/star-simple.svg',
-    thumbnailUrl: '/images/coloring/thumbs/star-simple.jpg',
-    isAIGenerated: false,
-    isApproved: true,
-    createdAt: new Date('2024-01-01'),
-    tags: ['estrela', 'forma', 'brilhante', 'simples']
-  },
-  {
-    id: 'robot_001',
-    name: 'Robô Amigável',
-    category: 'characters',
-    difficulty: 'medium',
-    imageUrl: '/images/coloring/robot-friendly.svg',
-    thumbnailUrl: '/images/coloring/thumbs/robot-friendly.jpg',
-    isAIGenerated: false,
-    isApproved: true,
-    createdAt: new Date('2024-01-01'),
-    tags: ['robô', 'personagem', 'amigável', 'tecnologia']
-  },
-  {
-    id: 'princess_001',
-    name: 'Princesa Gentil',
-    category: 'characters',
-    difficulty: 'medium',
-    imageUrl: '/images/coloring/princess-kind.svg',
-    thumbnailUrl: '/images/coloring/thumbs/princess-kind.jpg',
-    isAIGenerated: false,
-    isApproved: true,
-    createdAt: new Date('2024-01-01'),
-    tags: ['princesa', 'personagem', 'gentil', 'fantasia']
-  },
-  {
-    id: 'car_001',
-    name: 'Carrinho Divertido',
-    category: 'vehicles',
-    difficulty: 'easy',
-    imageUrl: '/images/coloring/car-fun.svg',
-    thumbnailUrl: '/images/coloring/thumbs/car-fun.jpg',
-    isAIGenerated: false,
-    isApproved: true,
-    createdAt: new Date('2024-01-01'),
-    tags: ['carro', 'veículo', 'divertido', 'transporte']
-  },
-  {
-    id: 'airplane_001',
-    name: 'Aviãozinho',
-    category: 'vehicles',
-    difficulty: 'easy',
-    imageUrl: '/images/coloring/airplane-simple.svg',
-    thumbnailUrl: '/images/coloring/thumbs/airplane-simple.jpg',
-    isAIGenerated: false,
-    isApproved: true,
-    createdAt: new Date('2024-01-01'),
-    tags: ['avião', 'veículo', 'voo', 'transporte']
-  },
-  {
-    id: 'apple_001',
-    name: 'Maçã Saudável',
-    category: 'food',
-    difficulty: 'easy',
-    imageUrl: '/images/coloring/apple-healthy.svg',
-    thumbnailUrl: '/images/coloring/thumbs/apple-healthy.jpg',
-    isAIGenerated: false,
-    isApproved: true,
-    createdAt: new Date('2024-01-01'),
-    tags: ['maçã', 'fruta', 'saudável', 'comida']
-  },
-  {
-    id: 'cake_001',
-    name: 'Bolo de Aniversário',
-    category: 'food',
-    difficulty: 'medium',
-    imageUrl: '/images/coloring/birthday-cake.svg',
-    thumbnailUrl: '/images/coloring/thumbs/birthday-cake.jpg',
-    isAIGenerated: false,
-    isApproved: true,
-    createdAt: new Date('2024-01-01'),
-    tags: ['bolo', 'aniversário', 'festa', 'comida']
-  },
-  {
-    id: 'teddy_001',
-    name: 'Ursinho de Pelúcia',
-    category: 'toys',
-    difficulty: 'easy',
-    imageUrl: '/images/coloring/teddy-bear.svg',
-    thumbnailUrl: '/images/coloring/thumbs/teddy-bear.jpg',
-    isAIGenerated: false,
-    isApproved: true,
-    createdAt: new Date('2024-01-01'),
-    tags: ['ursinho', 'brinquedo', 'pelúcia', 'fofo']
-  },
-  {
-    id: 'ball_001',
-    name: 'Bola Colorida',
-    category: 'toys',
-    difficulty: 'easy',
-    imageUrl: '/images/coloring/colorful-ball.svg',
-    thumbnailUrl: '/images/coloring/thumbs/colorful-ball.jpg',
-    isAIGenerated: false,
-    isApproved: true,
-    createdAt: new Date('2024-01-01'),
-    tags: ['bola', 'brinquedo', 'colorida', 'esporte']
-  },
-  {
-    id: 'unicorn_001',
-    name: 'Unicórnio Mágico',
-    category: 'fantasy',
-    difficulty: 'medium',
-    imageUrl: '/images/coloring/magical-unicorn.svg',
-    thumbnailUrl: '/images/coloring/thumbs/magical-unicorn.jpg',
-    isAIGenerated: false,
-    isApproved: true,
-    createdAt: new Date('2024-01-01'),
-    tags: ['unicórnio', 'fantasia', 'mágico', 'arco-íris']
-  },
-  {
-    id: 'castle_001',
-    name: 'Castelo Encantado',
-    category: 'fantasy',
-    difficulty: 'hard',
-    imageUrl: '/images/coloring/enchanted-castle.svg',
-    thumbnailUrl: '/images/coloring/thumbs/enchanted-castle.jpg',
-    isAIGenerated: false,
-    isApproved: true,
-    createdAt: new Date('2024-01-01'),
-    tags: ['castelo', 'fantasia', 'encantado', 'princesa']
   }
 ];
 
@@ -260,17 +92,86 @@ export default function ImageGallery({ onSelectImage, allowAIGeneration = false,
   const storage = useSecureStorage();
   const aiGenerator = useAIImageGenerator();
 
+  // Comprimir dataURL PNG grande para JPEG com fundo branco
+  const maybeCompressDataUrl = async (dataUrl: string): Promise<string> => {
+    try {
+      if (!dataUrl.startsWith('data:image/png') && !dataUrl.startsWith('data:image/svg')) {
+        return dataUrl;
+      }
+      // Se SVG, manter (já é leve)
+      if (dataUrl.startsWith('data:image/svg')) return dataUrl;
+
+      // Heurística: comprimir se > ~2MB
+      const approxBytes = Math.ceil(dataUrl.length * 3 / 4);
+      if (approxBytes < 2 * 1024 * 1024) return dataUrl;
+
+      const img = new Image();
+      const loaded = new Promise<void>((resolve, reject) => {
+        img.onload = () => resolve();
+        img.onerror = () => reject(new Error('Falha ao carregar imagem para compressão'));
+      });
+      img.src = dataUrl;
+      await loaded;
+
+      const maxSize = 1024; // reduzir para 1024 mantendo aspecto
+      const scale = Math.min(1, maxSize / Math.max(img.width, img.height));
+      const w = Math.max(1, Math.round(img.width * scale));
+      const h = Math.max(1, Math.round(img.height * scale));
+
+      const canvas = document.createElement('canvas');
+      canvas.width = w;
+      canvas.height = h;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return dataUrl;
+      // fundo branco para substituir transparência do PNG
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, w, h);
+      ctx.drawImage(img, 0, 0, w, h);
+      return canvas.toDataURL('image/jpeg', 0.72);
+    } catch {
+      return dataUrl;
+    }
+  };
+
   // Carregar imagens offline e favoritos
   useEffect(() => {
-    const offlineImages = storage.getOfflineImages();
-    const allImages = [...PRELOADED_IMAGES, ...offlineImages];
-    setImages(allImages);
-    setFilteredImages(allImages);
+    const load = async () => {
+      const offlineImages = storage.getOfflineImages();
+      // Carregar imagens do servidor
+      let serverImages: ColoringImage[] = [];
+      try {
+        const res = await fetch('/api/ai/list');
+        if (res.ok) {
+          const data = await res.json();
+          serverImages = (data.images || []).map((i: any) => ({
+            ...i,
+            createdAt: new Date(i.createdAt)
+          }));
+        }
+      } catch {}
 
-    // Carregar favoritos (usando achievements como proxy)
-    const achievements = storage.getAchievements();
-    const favoriteIds = achievements.filter(id => id.startsWith('fav_'));
-    setFavorites(favoriteIds.map(id => id.replace('fav_', '')));
+      // Deduplicar por id, priorizando servidor > pré-carregadas > offline
+      const uniqueMap = new Map<string, ColoringImage>();
+      const pushUnique = (list: ColoringImage[]) => {
+        for (const item of list) if (!uniqueMap.has(item.id)) uniqueMap.set(item.id, item);
+      };
+      pushUnique(serverImages);
+      pushUnique(PRELOADED_IMAGES);
+      pushUnique(offlineImages);
+
+      // Ordenar por data desc
+      const sorted = Array.from(uniqueMap.values()).sort((a, b) =>
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      );
+      setImages(sorted);
+      setFilteredImages(sorted);
+
+      // Carregar favoritos (usando achievements como proxy)
+      const achievements = storage.getAchievements();
+      const favoriteIds = achievements.filter(id => id.startsWith('fav_'));
+      setFavorites(favoriteIds.map(id => id.replace('fav_', '')));
+    };
+    load();
   }, []);
 
   // Filtrar imagens
@@ -333,9 +234,46 @@ export default function ImageGallery({ onSelectImage, allowAIGeneration = false,
     try {
       const newImage = await aiGenerator.generateImage('', category, false, ageGroup);
       if (newImage) {
-        const updatedImages = [...images, newImage];
-        setImages(updatedImages);
+        // Garantir thumbnailUrl e createdAt
+        if (!newImage.thumbnailUrl) newImage.thumbnailUrl = newImage.imageUrl;
+        if (!newImage.createdAt) newImage.createdAt = new Date();
+        // Comprimir se vier como PNG grande para evitar estourar a cota e sumir imagens anteriores
+        if (newImage.imageUrl.startsWith('data:image')) {
+          const compressed = await maybeCompressDataUrl(newImage.imageUrl);
+          newImage.imageUrl = compressed;
+          newImage.thumbnailUrl = compressed;
+        }
+        // Persistir no servidor
+        try {
+          await fetch('/api/ai/store', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              id: newImage.id,
+              name: newImage.name,
+              category: newImage.category,
+              difficulty: newImage.difficulty,
+              imageDataUrl: newImage.imageUrl,
+              tags: newImage.tags
+            })
+          });
+        } catch {}
+
+        // Salvar local e reordenar desc
         storage.addOfflineImage(newImage);
+        const offlineNow = storage.getOfflineImages();
+        const serverNow = await (async () => {
+          try { const r = await fetch('/api/ai/list'); if (r.ok) { const d = await r.json(); return (d.images||[]).map((i: any)=>({ ...i, createdAt:new Date(i.createdAt)})); } } catch{} return [] as ColoringImage[]; })();
+        const uniqueMap = new Map<string, ColoringImage>();
+        const pushUnique = (list: ColoringImage[]) => { for (const it of list) if (!uniqueMap.has(it.id)) uniqueMap.set(it.id, it); };
+        pushUnique(serverNow);
+        pushUnique(PRELOADED_IMAGES);
+        pushUnique(offlineNow);
+        const sorted = Array.from(uniqueMap.values()).sort((a, b) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        );
+        setImages(sorted);
+        setFilteredImages(sorted);
         
         // Mostrar feedback positivo
         showSuccessMessage('Nova imagem criada! ✨');
@@ -367,6 +305,26 @@ export default function ImageGallery({ onSelectImage, allowAIGeneration = false,
         <h1 className="text-child-2xl font-child-friendly text-center text-gray-800 mb-4">
           Escolha uma Imagem para Colorir! 🎨
         </h1>
+
+        {/* Limpar galeria */}
+        <div className="flex justify-center mb-3">
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => {
+              if (confirm('Deseja remover todas as imagens salvas da galeria?')) {
+                storage.clearOfflineImages();
+                const sorted = [...PRELOADED_IMAGES].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+                setImages(sorted);
+                setFilteredImages(sorted);
+                showSuccessMessage('Galeria limpa.');
+              }
+            }}
+            className="px-4 py-2 bg-red-500 text-white rounded-child font-child-friendly text-child-sm"
+          >
+            Limpar Galeria
+          </motion.button>
+        </div>
 
         {/* Barra de busca */}
         <div className="search-bar relative mb-4">
